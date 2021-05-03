@@ -1,0 +1,20 @@
+h1{
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5em;
+    font-weight: 900;
+}
+
+hr{
+    border-color: green;
+    max-width: 40rem;
+}
+
+.btn-left{
+    display: flex;
+    justify-content: left;
+
+}
+
+.inline{
+    display: inline!important;
+}
