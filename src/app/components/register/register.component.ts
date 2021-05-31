@@ -11,35 +11,34 @@ import { Notas } from '../../models/notas';
   styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent implements OnInit {
+  loading = false;
   register: FormGroup;
-  loading= false;
-
-  constructor(
-    private fb: FormBuilder,
-    private NotasService: NotasService,
-    private router: Router,
-    private toastr: ToastrService
-  ) {
+  constructor(private fb: FormBuilder,
+              private NotasService: NotasService,
+              private router: Router,
+              private toastr: ToastrService){
     this.register = this.fb.group({
-      Title: ['', Validators.required],
-      Content: ['', Validators.required],
-      Priority: ['', Validators.required]
+      title: ['', Validators.required],
+      content: ['', Validators.required],
+      priority: ['', Validators.required],
     });
   }
+
+  get f() { return this.register.controls; }
  
   ngOnInit(): void {}
 
   AddNote(): void {
-    this.loading = true;
     console.log(this.register);
     const notas: Notas = {
-      Id: this.register.value.Id,
-      Title: this.register.value.Title,
-      Content: this.register.value.Content,
-      Priority: this.register.value.Priority,
-      CreationDate: this.register.value.CreationDate,
-      UpdateDate: this.register.value.UpdateDate
+      // id: this.register.value.id,
+      title: this.register.value.title,
+      content: this.register.value.content,
+      priority: this.register.value.priority,
+      // creationDate: this.register.value.creationDate,
+      // updateDate: this.register.value.updateDate
     };
+    this.loading = true;
     this.NotasService.SaveNote(notas).subscribe(data => {
       console.log(data);
       this.loading = false;
@@ -52,16 +51,17 @@ export class RegisterComponent implements OnInit {
   }
 
   UpdateNote(): void {
-    this.loading = true;
     console.log(this.register);
+
     const notas: Notas = {
-      Id: this.register.value.Id,
-      Title: this.register.value.Title,
-      Content: this.register.value.Content,
-      Priority: this.register.value.Priority,
-      CreationDate: this.register.value.CreationDate,
-      UpdateDate: this.register.value.UpdateDate
+      // id: this.register.value.id,
+      title: this.register.value.title,
+      content: this.register.value.content,
+      priority: this.register.value.priority,
+      // creationDate: this.register.value.creationDate,
+      // updateDate: this.register.value.updateDate
     };
+    this.loading = true;
     this.NotasService.UpdateNote(notas).subscribe(data => {
       console.log(data);
       this.loading = false;

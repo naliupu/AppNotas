@@ -1,8 +1,8 @@
-export interface Notas{
-    Id: number;
-    Title: string;
-    Content: string;
-    Priority: number;
-    CreationDate: Date;
-    UpdateDate: Date;
+export class Notas{
+    // id: number;
+    title: string;
+    content: string;
+    priority: number;
+    // creationDate: Date;
+    // updateDate: Date;
 }

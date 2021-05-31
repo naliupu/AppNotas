@@ -27,11 +27,26 @@ export class InicioNotasComponent implements OnInit {
       console.log(data);
       this.listNotas = data;
       this.loading = false;
+      this.toastr.info('Notas listadas con exito', 'Notas');
+    }, error => {
+      console.log(error);
+      this.loading = false;
+      this.toastr.error('Ocurrio un error', 'Error');
+    });
+  }
+
+  SearchByDateNote(fecha: Date): void{
+    this.loading = true;
+    this.notasService.SearchByDateNote(fecha).subscribe(data => {
+      console.log(data);
+      this.listNotas = data;
+      this.loading = false;
     }, error => {
       console.log(error);
       this.loading = false;
       this.toastr.error('Opss.. ocurrio un error', 'Error');
     });
+
   }
 
   eliminarNota(idNota: number): void{
