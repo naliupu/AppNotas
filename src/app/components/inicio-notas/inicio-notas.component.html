@@ -8,43 +8,70 @@
       Agregar Nota
     </button>
   </div>
-
+  <br>
+  <br>
   <div class="btn-left">
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="date" placeholder="Buscar..." aria-label="Search">
-      <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Buscar</button>
+    <form [formGroup]="SearchDate" class="form-inline my-2 my-lg-0">
+      <input [(ngModel)]='fecha' class="form-control mr-sm-2" type="date" placeholder="Buscar..."
+        formControlName="Search" aria-label="Search">
+      <span class="text-danger ml-2"
+        *ngIf="SearchDate.get('Search').hasError('required') && SearchDate.get('Search').touched">
+        La fecha<strong> es requerida</strong>
+      </span>
+      <button *ngIf='fecha' class="btn btn-outline-info my-2 my-sm-0" id="btnSearch" type="button"
+        (click)="SearchByDateNote('fecha')">Buscar</button>
     </form>
   </div>
   <br />
-
   <app-loading *ngIf="loading"></app-loading>
-  <h3 *ngIf="listNotas.length == 0 && loading == false">No hay notas para monstrar</h3>
-  <div class="card" *ngFor="let nota of listNotas">
-    <div class="card-header">
-      <!-- 2020-04-21 11:23AM - Cuentas por pagar -->
-      {{ nota.creationDate }} {{ nota.title }}
-      <div class="text-right inline">
-        <button
-          type="button"
-          class="btn btn-outline-primary btn-sm inline"
-          routerLink="/register"
-        >
-          Modificar
-        </button>
-        |
-        <button type="button" class="btn btn-outline-danger btn-sm inline" (click)="eliminarNota(nota.id)">
-          Eliminar
-        </button>
+
+  <h3 *ngIf="listNotasFecha.length == 0 && loading == false && listNotas.length == 0">No hay notas para monstrar</h3>
+  <!-- <h3 *ngIf="listNotasFecha.length == 0 && loading == false && listNotas.length > 0">No se encontro ninguna nota en la fecha indicada</h3> -->
+  <div *ngIf="listNotasFecha.length > 0">
+    <div class="card" *ngFor="let nota of listNotasFecha">
+      <div class="card-header">
+        <!-- 2020-04-21 11:23AM - Cuentas por pagar -->
+        {{ nota.creationDate }} {{ nota.title }}
+        <div class="text-right inline">
+          <button type="button" class="btn btn-outline-primary btn-sm inline" (click)="elimainarNota(nota.id)">
+            Modificar
+          </button>
+          |
+          <button type="button" class="btn btn-outline-danger btn-sm inline" (click)="eliminarNota(nota.id)">
+            Eliminar
+          </button>
+        </div>
+        <div class="card-body">
+          <blockquote class="blockquote mb-0">
+            <p>{{ nota.content }}</p>
+          </blockquote>
+        </div>
       </div>
-      <div class="card-body">
-        <blockquote class="blockquote mb-0">
-          <!-- <p>A well-known quote, contained in a blockquote element.</p> -->
-          <!-- <footer class="blockquote-footer">
-            Someone famous in <cite title="Source Title">Source Title</cite>
-          </footer> -->
-          <p>{{ nota.content }}</p>
-        </blockquote>
+      <br>
+    </div>
+  </div>
+
+  <div *ngIf="listNotasFecha.length == 0">
+    <div class="card" *ngFor="let nota of listNotas">
+      <div class="card-header">
+        <!-- 2020-04-21 11:23AM - Cuentas por pagar -->
+        {{ nota.creationDate }} {{ nota.title }}
+        <div class="text-right inline">
+          <button type="button" class="btn btn-outline-primary btn-sm inline" (click)="elimainarNota(nota.id)">
+            Modificar
+          </button>
+          |
+          <button type="button" class="btn btn-outline-danger btn-sm inline" (click)="eliminarNota(nota.id)">
+            Eliminar
+          </button>
+        </div>
+        <div class="card-body">
+          <blockquote class="blockquote mb-0">
+            <p>{{ nota.content }}</p>
+          </blockquote>
+        </div>
       </div>
+      <br>
     </div>
   </div>
 </div>

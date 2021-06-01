@@ -128,5 +128,8 @@
       }
     }
   },
-  "defaultProject": "NotasApp"
+  "defaultProject": "NotasApp",
+  "cli": {
+    "analytics": "d9056f24-de63-47ee-8f76-c9ee63970ec8"
+  }
 }

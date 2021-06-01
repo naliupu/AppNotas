@@ -4,10 +4,10 @@ import {
   HttpHeaders
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+
 
 const { endpoint } = environment;
 
@@ -16,31 +16,33 @@ const { endpoint } = environment;
 })
 export class ApiServiceService {
   headers = new HttpHeaders();
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
-  public makeRequest(method: string, path: string, data?: any, id?: any,fecha?: Date) : Observable<any>  {
+  public makeRequest(method: string, path: string, notas: any, id?: any,fecha?: Date) : Observable<any>  {
     // const { params, data } = payload;
     let httpHeaders = new HttpHeaders()
-      .set('Content-Type', 'application/json')
+      .set('Accept', 'application/json')
     let options = { headers: httpHeaders };
-    if (method == "GET") {
+    if (method == "POST") {
+      console.log(notas);
+      let resp = this.http.post(`${endpoint}/${path}`, notas, options);
+          // .pipe(catchError(this.handleError));
+      return resp;
+    }else if (method == "GET") {
       let resp = this.http
-        .get(`${path}`, options)
+        .get(`${endpoint}/${path}`, options)
         .pipe(catchError(this.handleError));
       return resp;
-    }else if (method == "POST") {
-      let resp = this.http
-          .post(`${path}`, data, options)
-          .pipe(catchError(this.handleError));
-      return resp;
+    
     }else if (method == "PUT") {
       let resp = this.http
-          .put(`${endpoint}/${path}`, data, options)
+          .put(`${endpoint}/${path}`, notas, options)
           .pipe(catchError(this.handleError));
       return resp;
     }else if(method == "DELETE"){
       let resp = this.http
-          .delete(`${path}/${id}`, options)
+          .delete(`${endpoint}/${path}/${id}`, options)
           .pipe(catchError(this.handleError));
       return resp;
     }
@@ -55,20 +57,20 @@ export class ApiServiceService {
     return this.makeRequest('GET', path, params);
   }
 
-  public post(path: string, data: any): Observable<any> {
+  public post(path: string, notas: any): Observable<any> {
     console.log('POST request initiated');
     console.log(`Path: ${path}`);
-    console.log('Payload:', data);
+    console.log('Payload:', notas);
 
-    return this.makeRequest('POST', path, { data });
+    return this.makeRequest('POST', path, { notas });
   }
 
-  public put(path: string, data: any): Observable<any> {
+  public put(path: string, notas: any): Observable<any> {
     console.log('PUT request initiated');
     console.log(`Path: ${path}`);
-    console.log('Payload:', data);
+    console.log('Payload:', notas);
 
-    return this.makeRequest('PUT', path, { data });
+    return this.makeRequest('PUT', path, { notas });
   }
 
   public delete(path: string, params: any): Observable<any> {

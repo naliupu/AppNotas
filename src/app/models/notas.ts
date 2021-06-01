@@ -1,8 +1,8 @@
 export class Notas{
-    // id: number;
+    id?: number;
     title: string;
     content: string;
     priority: number;
-    // creationDate: Date;
-    // updateDate: Date;
+    creationDate?: Date;
+    updateDate?: Date;
 }

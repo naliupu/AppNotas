@@ -31,12 +31,9 @@ export class RegisterComponent implements OnInit {
   AddNote(): void {
     console.log(this.register);
     const notas: Notas = {
-      // id: this.register.value.id,
       title: this.register.value.title,
-      content: this.register.value.content,
-      priority: this.register.value.priority,
-      // creationDate: this.register.value.creationDate,
-      // updateDate: this.register.value.updateDate
+      content:  this.register.value.content,
+      priority: parseInt(this.register.value.priority),
     };
     this.loading = true;
     this.NotasService.SaveNote(notas).subscribe(data => {
@@ -45,6 +42,7 @@ export class RegisterComponent implements OnInit {
       this.toastr.success('La nota fue registrada con exito', 'Nota registrada');
       this.router.navigate(['/inicio']);
     }, error => {
+      console.log(error);
       this.loading = false;
       this.toastr.error('Error al guadar nota', 'Error guardar');
     });
@@ -54,12 +52,10 @@ export class RegisterComponent implements OnInit {
     console.log(this.register);
 
     const notas: Notas = {
-      // id: this.register.value.id,
+      id: this.register.value.id,
       title: this.register.value.title,
       content: this.register.value.content,
       priority: this.register.value.priority,
-      // creationDate: this.register.value.creationDate,
-      // updateDate: this.register.value.updateDate
     };
     this.loading = true;
     this.NotasService.UpdateNote(notas).subscribe(data => {
@@ -68,6 +64,7 @@ export class RegisterComponent implements OnInit {
       this.toastr.info('La nota fue modificada con exito', 'Nota modificada');
       this.router.navigate(['/inicio']);
     }, error => {
+      console.log(error);
       this.loading = false;
       this.toastr.error('Error al guadar nota', 'Error guardar');
     });
