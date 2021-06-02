@@ -13,27 +13,27 @@
   <div class="btn-left">
     <form [formGroup]="SearchDate" class="form-inline my-2 my-lg-0">
       <input [(ngModel)]='fecha' class="form-control mr-sm-2" type="date" placeholder="Buscar..."
-        formControlName="Search" aria-label="Search">
-      <span class="text-danger ml-2"
-        *ngIf="SearchDate.get('Search').hasError('required') && SearchDate.get('Search').touched">
-        La fecha<strong> es requerida</strong>
-      </span>
+        formControlName="Search" aria-label="Search" max="{{myDate | date: 'yyyy-MM-dd'}}">
+
       <button *ngIf='fecha' class="btn btn-outline-info my-2 my-sm-0" id="btnSearch" type="button"
         (click)="SearchByDateNote('fecha')">Buscar</button>
+
+      <button class="btn btn-success my-2 my-sm-0" id="" type="button" (click)="refresh()">Recargar</button>
     </form>
   </div>
   <br />
   <app-loading *ngIf="loading"></app-loading>
 
-  <h3 *ngIf="listNotasFecha.length == 0 && loading == false && listNotas.length == 0">No hay notas para monstrar</h3>
+  <h3 *ngIf="loading == false && listNotas.length == 0">No hay notas para monstrar</h3>
+  <h3 *ngIf="loading == false && listNotasFecha.length == 0 && dataNull == 1">No hay notas en esta fecha: {{myDate |
+    date: 'yyyy-MM-dd'}}</h3>
   <!-- <h3 *ngIf="listNotasFecha.length == 0 && loading == false && listNotas.length > 0">No se encontro ninguna nota en la fecha indicada</h3> -->
   <div *ngIf="listNotasFecha.length > 0">
     <div class="card" *ngFor="let nota of listNotasFecha">
       <div class="card-header">
-        <!-- 2020-04-21 11:23AM - Cuentas por pagar -->
-        {{ nota.creationDate }} {{ nota.title }}
+        {{ nota.creationDate | date: 'yyyy-MM-dd' }} {{ nota.title }}
         <div class="text-right inline">
-          <button type="button" class="btn btn-outline-primary btn-sm inline" (click)="elimainarNota(nota.id)">
+          <button type="button" class="btn btn-outline-primary btn-sm inline" routerLink="/register">
             Modificar
           </button>
           |
@@ -51,13 +51,12 @@
     </div>
   </div>
 
-  <div *ngIf="listNotasFecha.length == 0">
+  <div *ngIf="loading == false && dataNull == 0">
     <div class="card" *ngFor="let nota of listNotas">
       <div class="card-header">
-        <!-- 2020-04-21 11:23AM - Cuentas por pagar -->
-        {{ nota.creationDate }} {{ nota.title }}
+        {{ nota.creationDate | date: 'yyyy-MM-dd'}} |
         <div class="text-right inline">
-          <button type="button" class="btn btn-outline-primary btn-sm inline" (click)="elimainarNota(nota.id)">
+          <button type="button" class="btn btn-outline-primary btn-sm inline" routerLink="/register">
             Modificar
           </button>
           |
@@ -65,6 +64,9 @@
             Eliminar
           </button>
         </div>
+        <hr id="hr-nota">
+        <!-- {{ nota.title }} -->
+        <h4>{{ nota.title}}</h4>
         <div class="card-body">
           <blockquote class="blockquote mb-0">
             <p>{{ nota.content }}</p>
@@ -74,4 +76,3 @@
       <br>
     </div>
   </div>
-</div>

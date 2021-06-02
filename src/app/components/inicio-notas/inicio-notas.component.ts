@@ -13,23 +13,28 @@ import { NotasService } from 'src/app/service/notas.service';
 export class InicioNotasComponent implements OnInit {
   listNotas: Notas[] = [];
   listNotasFecha: Notas[] = [];
-  fecha: Date = null
+  fecha: Date = null;
   SearchDate: FormGroup;
+  myDate = new Date();
+  dataNull = 0;
+
 
   loading = false;
   constructor(private notasService: NotasService,
-              private toastr: ToastrService,
-              private fb: FormBuilder,
-              private router: Router,
-              ) {
-           this.SearchDate = this.fb.group({
-            Search: ['', Validators.required],
+    private toastr: ToastrService,
+    private fb: FormBuilder,
+  ) {
+    this.SearchDate = this.fb.group({
+      Search: ['', Validators.required],
     });
-
   }
 
   ngOnInit(): void {
     this.GetNote();
+  }
+
+  refresh(): void {
+    window.location.reload();
   }
 
 
@@ -51,13 +56,16 @@ export class InicioNotasComponent implements OnInit {
     this.loading = true;
     fecha = this.fecha;
     this.notasService.SearchByDateNote(fecha).subscribe(data => {
-      
+
       this.listNotasFecha = data;
-      if(this.listNotasFecha.length == 0){
+      if (this.listNotasFecha.length == 0) {
         console.log("No se encontraron notas");
-      this.toastr.warning('No se encontro notas en la fecha indicada', 'Sin notas');
-      this.router.navigate(['/inicio']);
+        this.toastr.warning('No se encontro notas en la fecha indicada', 'Sin notas');
+        this.dataNull = 1;
+        this.fecha =null;
       }
+      this.dataNull = 1;
+      this.fecha =null;
       this.loading = false;
       this.toastr.info('Notas filtradas con exito', 'Notas');
     }, error => {

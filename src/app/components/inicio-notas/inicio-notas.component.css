@@ -9,6 +9,11 @@ hr{
     max-width: 40rem;
 }
 
+#hr-nota{
+    max-width: 100%;
+    border-color: gray;
+}
+
 .btn-left{
     display: flex;
     justify-content: left;
@@ -17,4 +22,8 @@ hr{
 
 .inline{
     display: inline!important;
+}
+
+#btnSearch{
+    margin-right: 2rem;
 }
