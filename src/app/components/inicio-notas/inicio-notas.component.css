@@ -24,6 +24,10 @@ hr{
     display: inline!important;
 }
 
-#btnSearch{
-    margin-right: 2rem;
+#btnMarginRight{
+    margin-right: 3rem;
+}
+
+#btnBuscar{
+    margin-right: 1rem;
 }

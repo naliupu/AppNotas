@@ -25,8 +25,8 @@ export class NotasService {
     // return this.api.post(poolData.url + 'Registrar', notas)
   }
 
-  UpdateNote(notas: Notas): Observable<any>{
-    return this.http.delete(this.myAppUrl + this.myApiUrl + "Modificar/"+ notas);
+  UpdateNote(idNotas: number, notas: Notas): Observable<any>{
+    return this.http.put(this.myAppUrl + this.myApiUrl + "Modificar/"+ idNotas, notas);
     // return this.api.put(poolData.url + "Modificar", notas);
   }
 

@@ -58,7 +58,7 @@ export class RegisterComponent implements OnInit {
       priority: this.register.value.priority,
     };
     this.loading = true;
-    this.NotasService.UpdateNote(notas).subscribe(data => {
+    this.NotasService.UpdateNote(176, notas).subscribe(data => {
       console.log(data);
       this.loading = false;
       this.toastr.info('La nota fue modificada con exito', 'Nota modificada');
