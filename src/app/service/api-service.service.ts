@@ -19,34 +19,30 @@ export class ApiServiceService {
   constructor(private http: HttpClient) {
   }
 
-  public makeRequest(method: string, path: string, notas: any, id?: any,fecha?: Date) : Observable<any>  {
+  public makeRequest(method: string, path: string, notas: any): Observable<any> {
     // const { params, data } = payload;
-    let httpHeaders = new HttpHeaders()
-      .set('Accept', 'application/json')
-    let options = { headers: httpHeaders };
-    if (method == "POST") {
-      console.log(notas);
-      let resp = this.http.post(`${endpoint}/${path}`, notas, options);
-          // .pipe(catchError(this.handleError));
-      return resp;
-    }else if (method == "GET") {
+    // let httpHeaders = new HttpHeaders()
+    //   .set('Accept', 'application/json')
+    // let options = { headers: httpHeaders };
+
+    if (method == "GET") {
       let resp = this.http
-        .get(`${endpoint}/${path}`, options)
+        .get(`${endpoint}/${path}`)
         .pipe(catchError(this.handleError));
       return resp;
-    
-    }else if (method == "PUT") {
-      let resp = this.http
-          .put(`${endpoint}/${path}`, notas, options)
-          .pipe(catchError(this.handleError));
+    } else if (method == "POST") {
+      console.log(notas);
+      let resp = this.http.post(`${endpoint}/${path}`, notas)
+      .pipe(catchError(this.handleError));
       return resp;
-    }else if(method == "DELETE"){
+    } else if (method == "PUT") {
       let resp = this.http
-          .delete(`${endpoint}/${path}/${id}`, options)
-          .pipe(catchError(this.handleError));
+        .put(`${endpoint}/${path}`, notas)
+        .pipe(catchError(this.handleError));
       return resp;
     }
     let resp = console.log("Error, no se encontro el metodo");
+
     return throwError(resp);
   }
 
@@ -58,9 +54,9 @@ export class ApiServiceService {
   }
 
   public post(path: string, notas: any): Observable<any> {
-    console.log('POST request initiated');
-    console.log(`Path: ${path}`);
-    console.log('Payload:', notas);
+    console.log('POST');
+    console.log(`RUTA: ${path}`);
+    console.log('DATA:', notas);
 
     return this.makeRequest('POST', path, { notas });
   }
@@ -90,7 +86,7 @@ export class ApiServiceService {
       // The response body may contain clues as to what went wrong.
       console.log(
         `Backend returned code ${error.status}, ` +
-          `body was: ${error.error.message}`
+        `body was: ${error.error.message}`
       );
     }
     // Return an observable with a user-facing error message.

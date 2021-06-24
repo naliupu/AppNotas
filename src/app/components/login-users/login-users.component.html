@@ -1,0 +1,35 @@
+<div id="logreg-forms">
+  <form [formGroup]="loginUsers" class="form-signin">
+    <h1 class="h3 mb-3 font-weight-normal" style="text-align: center">Iniciar sesion</h1>
+
+    <div class="form-group" style="text-align: start;">
+      <label>Usuario</label>
+      <input type="text" class="form-control input-login" formControlName="username" placeholder="Usuario">
+      <span class="text-danger ml-2"
+        *ngIf="loginUsers.get('username').hasError('required') && loginUsers.get('username').touched">
+        El usuario <strong> es requerido</strong>
+      </span>
+      <span class="text-danger ml-3" *ngIf="loginUsers.get('username').hasError('maxlength')">
+        El usuario debe tener como maximo <strong>10 caracteres</strong>
+      </span>
+    </div>
+
+    <div class="form-group" style="text-align: start;">
+      <label>Contraseña</label>
+      <input type="password" id="inputPassword" class="form-control input-login" formControlName="password"
+        placeholder="Contraseña">
+      <span class="text-danger ml-2"
+        *ngIf="loginUsers.get('password').hasError('required') && loginUsers.get('password').touched">
+        la contraseña <strong> es requerida</strong>
+      </span>
+      <span class="text-danger ml-3" *ngIf="loginUsers.get('password').hasError('maxlength')">
+        El usuario debe tener como maximo <strong>10 caracteres</strong>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <button class="btn btn-success btn-block" type="submit">Entrar</button>
+    </div>
+    <hr>
+  </form>
+</div>

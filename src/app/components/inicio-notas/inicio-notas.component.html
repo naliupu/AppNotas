@@ -6,115 +6,109 @@
   <br>
   <br>
   <div class="btn-left">
-    <button id="btnMarginRight" type="button" class="btn btn-outline-success btn-lg ml-2" routerLink="/register" >    
+    <button id="btnMarginRight" type="button" class="btn btn-outline-success btn-lg ml-2" routerLink="/register">
       Nueva Nota
     </button>
     <form [formGroup]="SearchDate" class="form-inline my-2 my-lg-0">
-      <input [(ngModel)]='fecha' class="form-control mr-sm-2" type="date" placeholder="Buscar..."
-        formControlName="Search" aria-label="Search" max="{{myDate | date: 'yyyy-MM-dd'}}">
 
-      <button *ngIf='fecha' class="btn btn-outline-info my-2 my-sm-0" id="btnBuscar" type="button"
-        (click)="SearchByDateNote('fecha')">
+      <input [(ngModel)]='updateDate' class="form-control mr-sm-2" type="date" placeholder="Buscar..."
+        formControlName="updateDate" aria-label="updateDate" max="{{myDate | date: 'yyyy-MM-dd'}}">
+
+      <button *ngIf='updateDate' class="btn btn-outline-info my-2 my-sm-0" id="btnBuscar" type="button"
+        (click)="SearchByDateNote()">
         Buscar
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search"
+          viewBox="0 0 16 16">
+          <path
+            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
         </svg>
       </button>
 
       <button class="btn btn-success my-2 my-sm-0" id="" type="button" (click)="refresh()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/>
-        <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/>
-      </svg>
-    </button>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+          class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z" />
+          <path
+            d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z" />
+        </svg>
+      </button>
     </form>
   </div>
   <br />
   <app-loading *ngIf="loading"></app-loading>
 
   <h3 *ngIf="loading == false && listNotas.length == 0">No hay notas para monstrar</h3>
-  <h3 *ngIf="loading == false && listNotasFecha.length == 0 && dataNull == 1">No hay notas en esta fecha: {{myDate |
-    date: 'yyyy-MM-dd'}}</h3>
+  <h3 *ngIf="loading == false && listNotasFecha.length == 0 && dataNull == 1">No hay notas en la fecha buscada</h3>
 
-   
-
-    <!-- LISTAR NOTAS FILTRADAS POR UNA FECHA -->
-  <div *ngIf="listNotasFecha.length > 0 && loading == false">
-    <div class="card" *ngFor="let nota of listNotasFecha">
-      <div class="card-header">
-        {{ nota.creationDate | date: 'yyyy-MM-dd' }} {{ nota.title }}
-        <div class="text-right inline">
-          <button type="button" class="btn btn-outline-primary btn-sm inline" routerLink="/register">
-            Modificar
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
-              <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z"/>
-            </svg>
-          </button>
-          |
-          
-          <button type="button" class="btn btn-outline-danger btn-sm inline" (click)="eliminarNota(nota.id)">
-            Eliminar
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-              <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
-            </svg>
-          </button>
-        </div>
-        <div class="card-body">
-          <blockquote class="blockquote mb-0">
-            <p>{{ nota.content }}</p>
-          </blockquote>
-        </div>
-      </div>
-      <br>
-    </div>
-  </div>
 
   <!-- LISTAR NOTAS -->
-  <div *ngIf="loading == false && dataNull == 0">
+  <div *ngIf="loading == false && listNotasFecha.length == 0 && dataNull == 0">
     <div class="card" *ngFor="let nota of listNotas">
       <div class="card-header">
-        {{ nota.creationDate | date: 'yyyy-MM-dd'}} |
+        {{ nota.updateDate | date: 'yyyy-MM-dd - HH:mm'}} |
         <div class="text-right inline">
-          <button type="button" class="btn btn-outline-primary btn-sm inline" routerLink="/register">
+          <button type="button" class="btn btn-outline-primary btn-sm inline" (click)="saveNota(nota)">
             Modificar
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
-              <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pen-fill"
+              viewBox="0 0 16 16">
+              <path
+                d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z" />
             </svg>
           </button>
           |
-          <!-- <button type="button" class="btn btn-outline-danger btn-sm inline" (click)="open(eliminar)"> -->
-            <button type="button" class="btn btn-outline-danger btn-sm inline" (click)="eliminarNota(nota.id)">
+          <button type="button" class="btn btn-outline-danger btn-sm inline" (click)="eliminarNota(nota)">
             Eliminar
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-              <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash-fill"
+              viewBox="0 0 16 16">
+              <path
+                d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
             </svg>
           </button>
-        </div>
-        <hr id="hr-nota">
-        <h4>{{ nota.title}}</h4>
-        <div class="card-body">
-          <blockquote class="blockquote mb-0">
-            <p>{{ nota.content }}</p>
-          </blockquote>
+
         </div>
       </div>
-      <br>
+      <div class="card-body">
+        <h4>{{ nota.title}}</h4>
+        <blockquote class="blockquote mb-0">
+          <p>{{ nota.content }}</p>
+        </blockquote>
+      </div>
     </div>
   </div>
 
+  <!-- LISTAR NOTAS FILTRADAS POR UNA FECHA -->
+  <div class="card" *ngFor="let nota of listNotasFecha">
+    <div class="card-header">
+      {{ nota.updateDate | date: 'yyyy-MM-dd - HH:mm'}} |
+      <div class="text-right inline">
+        <button type="button" class="btn btn-outline-primary btn-sm inline" (click)="saveNota(nota)">
+          Modificar
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pen-fill"
+            viewBox="0 0 16 16">
+            <path
+              d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z" />
+          </svg>
+        </button>
+        |
+        <button type="button" class="btn btn-outline-danger btn-sm inline" (click)="eliminarNota(nota)">
+          Eliminar
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash-fill"
+            viewBox="0 0 16 16">
+            <path
+              d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+          </svg>
+        </button>
 
-<!-- MODAL PARA ELIMINAR NOTA -->
-<ng-template #eliminar let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Eliminar Nota</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">×</span>
-    </button>
+      </div>
+    </div>
+    <div class="card-body">
+      <h4>{{ nota.title}}</h4>
+
+      <blockquote class="blockquote mb-0">
+        <p>{{ nota.content }}</p>
+      </blockquote>
+    </div>
   </div>
-  <div class="modal-body">
-    ¿Esta seguro que desea eliminar la nota?
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark"  (click)="modal.close('Save click')">Ok</button>
-  </div>
-</ng-template>
+  <app-update-notas [dataEntrante]="nota" *ngFor="let nota of listNotasFecha"></app-update-notas>
+
+</div>

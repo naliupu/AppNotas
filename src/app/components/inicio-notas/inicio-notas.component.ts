@@ -1,10 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2'
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Notas } from 'src/app/models/notas';
 import { NotasService } from 'src/app/service/notas.service';
+import { GetDateService } from 'src/app/service/get-date.service';
+import { Router } from '@angular/router';
+
+// import { UpdateNotasComponent} from '../update-notas/update-notas.component';
 
 @Component({
   selector: 'app-inicio-notas',
@@ -12,24 +15,30 @@ import { NotasService } from 'src/app/service/notas.service';
   styleUrls: ['./inicio-notas.component.css']
 })
 export class InicioNotasComponent implements OnInit {
-  listNotas: Notas[] = [];
-  listNotasFecha: Notas[] = [];
-  fecha: Date = null;
-  SearchDate: FormGroup;
-  myDate = new Date();
-  dataNull = 0;
-  deleteOk = null;
-
-  closeResult: string;
-
   loading = false;
-  constructor(private notasService: NotasService,
+  myDate = new Date();//Para sacar la fecha de hoy
+  fecha: Notas = null;
+  updateDate: Notas;
+  SearchDate: FormGroup; //formGroup de formulario para ingresar fecha
+  dataNull = 0;
+  listNotas: Notas[] = []; //Guarda un listado de notas 
+  listNotasFecha: Notas[] = []; //Guarda un listado de notas que se buscan por fecha
+  idNota = null;
+
+
+  notas: Notas;
+  nota: any;
+  listNotass: Notas[] = [];
+
+  constructor(
+    private notasService: NotasService,
+    private getDate: GetDateService,
     private toastr: ToastrService,
     private fb: FormBuilder,
-    private modalService: NgbModal
+    private router: Router
   ) {
     this.SearchDate = this.fb.group({
-      Search: ['', Validators.required],
+      updateDate: ['', Validators.required],
     });
   }
 
@@ -41,11 +50,17 @@ export class InicioNotasComponent implements OnInit {
     window.location.reload();
   }
 
+  saveNota(nota) {
+    this.getDate.nota = nota;
+    console.log(this.getDate);
+    this.router.navigate(['/update']);
+  }
+
   GetNote(): void {
     this.loading = true;
     this.notasService.GetNotes().subscribe(data => {
-      console.log(data);
-      this.listNotas = data;
+      this.listNotas = data.notas;
+      console.log(this.listNotas);
       this.loading = false;
       this.toastr.info('Notas listadas con exito', 'Notas');
     }, error => {
@@ -55,24 +70,28 @@ export class InicioNotasComponent implements OnInit {
     });
   }
 
-  SearchByDateNote(fecha: Date): void {
+  SearchByDateNote(): void {
     this.loading = true;
-    fecha = this.fecha;
-    this.notasService.SearchByDateNote(fecha).subscribe(data => {
-
-      this.listNotasFecha = data;
-      if (this.listNotasFecha.length == 0) {
-        console.log("No se encontraron notas");
-        this.toastr.warning('No se encontro notas en la fecha indicada', 'Sin notas');
-        this.dataNull = 1;
-        this.fecha = null;
+    const notas: Notas = {
+      updateDate: this.SearchDate.value.updateDate,
+    };
+    this.notasService.SearchByDateNote(notas).subscribe(data => {
+      this.listNotasFecha = data.notas;
+      if (this.listNotasFecha.length > 0) {
+        console.log(this.listNotasFecha);
+        this.listNotasFecha = data.notas;
+        this.toastr.info('Notas filtradas con exito', 'Notas');
       }
-      this.dataNull = 1;
-      this.fecha = null;
 
+      if (this.listNotasFecha.length === 0) {
+        this.toastr.warning('No se encontro notas en la fecha indicada', 'Sin notas');
+        console.log(this.listNotasFecha.length);
+        this.updateDate = null;
+        this.dataNull = 1;
+      }
       this.loading = false;
-      this.toastr.info('Notas filtradas con exito', 'Notas');
     }, error => {
+      console.log(this.listNotasFecha);
       console.log(error);
       this.loading = false;
       this.toastr.error('Ocurrio un error', 'Error');
@@ -80,7 +99,7 @@ export class InicioNotasComponent implements OnInit {
 
   }
 
-  eliminarNota(idNota: number): void {
+  eliminarNota(nota: Notas): void {
     Swal.fire({
       title: 'Estas seguro de eliminar esta nota?',
       text: `No podras recuperar la nota al eliminar!`,
@@ -92,9 +111,9 @@ export class InicioNotasComponent implements OnInit {
       confirmButtonText: 'Si, Eleminar nota!'
     }).then(result => {
       if (result.value) {
-        this.notasService.DeleteNote(idNota).subscribe(() => {
-          this.GetNote();
+        this.notasService.DeleteNote(nota).subscribe(() => {
           Swal.fire('Nota eliminada!', 'La nota fue eliminado con exito', 'success');
+          this.GetNote();
           this.loading = false;
         }, error => {
           Swal.fire('Error!', 'Ocurrio un error', 'error');
@@ -102,7 +121,6 @@ export class InicioNotasComponent implements OnInit {
           this.loading = false;
           this.toastr.error('Ocurrio un error', 'Error');
           this.GetNote();
-
         });
       }
     });

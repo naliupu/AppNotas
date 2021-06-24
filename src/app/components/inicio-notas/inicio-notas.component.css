@@ -4,8 +4,20 @@ h1{
     font-weight: 900;
 }
 
+.card {
+    margin-bottom: 20px;
+    border-color: rgb(199, 199, 199);
+}
+
+.card-header{
+    background-color: rgb(225, 223, 223);
+}
+.card-body{
+    background-color: rgb(242, 242, 242);
+}
+
 hr{
-    border-color: green;
+    border-color: green;    
     max-width: 40rem;
 }
 

@@ -1,7 +1,7 @@
 <div class="container">
   <div class="col-md-12">
     <div class="modal-header">
-      <h4>Agregar O Editar Nota</h4>
+      <h4>Nueva Nota</h4>
     </div>
     <div class="">
       <app-loading *ngIf="loading"></app-loading>
@@ -13,6 +13,9 @@
           <span class="text-danger ml-2"
             *ngIf="register.get('title').hasError('required') && register.get('title').touched">
             El titulo <strong> es requerido</strong>
+          </span>
+          <span class="text-danger ml-3" *ngIf="register.get('title').hasError('maxlength')">
+            El titulo debe tener como maximo <strong>20 caracteres</strong>
           </span>
         </div>
 
@@ -27,8 +30,10 @@
           </select>
           <span class="text-danger ml-2"
             *ngIf="register.get('priority').hasError('required') && register.get('priority').touched">La prioridad
-            <strong>es requerida</strong></span>
+            <strong>es requerida</strong>
+          </span>
         </div>
+
         <div class="form-group">
           <label for="content">Nota</label>
           <div class="input-group">
@@ -36,14 +41,19 @@
               formControlName="content"></textarea>
             <span class="text-danger ml-2"
               *ngIf="register.get('content').hasError('required') && register.get('content').touched">La nota <strong>es
-                requerida</strong></span>
+                requerida</strong>
+            </span>
+            <span class="text-danger ml-3" *ngIf="register.get('content').hasError('maxlength')">
+              El contenido debe tener como maximo <strong>300 caracteres</strong>
+            </span>
           </div>
         </div>
+
         <div class="form-group">
-          <button type="submit" class="btn btn-outline-primary" (click)="AddNote()">Aceptar</button>
-          <button type="submit" class="btn btn-outline-primary" (click)="UpdateNote()">Modificar</button>
+          <button type="submit" id="btnOk" class="btn btn-outline-primary" (click)="AddNote()">Registrar</button>
           <button class="btn btn-outline-danger" routerLink="/inicio">Volver</button>
         </div>
+
       </form>
     </div>
   </div>

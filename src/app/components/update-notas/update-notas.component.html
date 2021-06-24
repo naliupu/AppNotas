@@ -1,0 +1,57 @@
+<div class="container">
+    <div class="col-md-12">
+        <div class="modal-header">
+            <h4>Modificar Nota</h4>
+        </div>
+
+        <app-loading *ngIf="loading"></app-loading>
+        <form [formGroup]="updateNotas">
+            <div class="form-group" style="text-align: start;">
+                <label>Titulo</label>
+                <input type="text" id="title" class="form-control" formControlName="title">
+                <span class="text-danger ml-2"
+                    *ngIf="updateNotas.get('title').hasError('required') && updateNotas.get('title').touched">
+                    El titulo <strong> es requerido</strong>
+                </span>
+                <span class="text-danger ml-3" *ngIf="updateNotas.get('title').hasError('maxlength')">
+                    El titulo debe tener como maximo <strong>20 caracteres</strong>
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label for="priority">Prioridad de la nota</label>
+                <select value="" class="form-control" id="priority" formControlName="priority">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+                <span class="text-danger ml-2"
+                    *ngIf="updateNotas.get('priority').hasError('required') && updateNotas.get('priority').touched">La
+                    prioridad
+                    <strong>es requerida</strong></span>
+            </div>
+            <div class="form-group">
+                <label for="content">Nota</label>
+                <div class="input-group">
+                    <textarea value="" class="form-control" id="content" rows="10" placeholder="Texto...."
+                        formControlName="content"></textarea>
+                    <span class="text-danger ml-2"
+                        *ngIf="updateNotas.get('content').hasError('required') && updateNotas.get('content').touched">La nota
+                        <strong>es
+                            requerida</strong>
+                    </span>
+                    <span class="text-danger ml-3" *ngIf="updateNotas.get('content').hasError('maxlength')">
+                        El contenido debe tener como maximo <strong>300 caracteres</strong>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" id="btnOk" class="btn btn-outline-primary"
+                    (click)="UpdateNote()">Modificar</button>
+                <button class="btn btn-outline-danger" routerLink="/inicio">Volver</button>
+            </div>
+        </form>
+    </div>
+</div>

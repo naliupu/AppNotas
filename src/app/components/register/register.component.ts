@@ -13,13 +13,23 @@ import { Notas } from '../../models/notas';
 export class RegisterComponent implements OnInit {
   loading = false;
   register: FormGroup;
+
+
+  listNotas: Notas[] = [];
+  listNotasFecha: Notas[] = [];
+  fecha: Date = null;
+  SearchDate: FormGroup;
+  myDate = new Date();
+  dataNull = 0;
+  deleteOk = null;
+
   constructor(private fb: FormBuilder,
               private NotasService: NotasService,
               private router: Router,
               private toastr: ToastrService){
     this.register = this.fb.group({
-      title: ['', Validators.required],
-      content: ['', Validators.required],
+      title: ['', [Validators.required, Validators.maxLength(20)]],
+      content: ['', [Validators.required, Validators.maxLength(300)]],
       priority: ['', Validators.required],
     });
   }
@@ -36,6 +46,7 @@ export class RegisterComponent implements OnInit {
       priority: parseInt(this.register.value.priority),
     };
     this.loading = true;
+    this.GetNote();
     this.NotasService.SaveNote(notas).subscribe(data => {
       console.log(data);
       this.loading = false;
@@ -48,25 +59,17 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  UpdateNote(): void {
-    console.log(this.register);
-
-    const notas: Notas = {
-      id: this.register.value.id,
-      title: this.register.value.title,
-      content: this.register.value.content,
-      priority: this.register.value.priority,
-    };
+  GetNote(): void {
     this.loading = true;
-    this.NotasService.UpdateNote(176, notas).subscribe(data => {
+    this.NotasService.GetNotes().subscribe(data => {
       console.log(data);
+      this.listNotas = data;
       this.loading = false;
-      this.toastr.info('La nota fue modificada con exito', 'Nota modificada');
-      this.router.navigate(['/inicio']);
+      this.toastr.info('Notas listadas con exito', 'Notas');
     }, error => {
       console.log(error);
       this.loading = false;
-      this.toastr.error('Error al guadar nota', 'Error guardar');
+      this.toastr.error('Ocurrio un error', 'Error');
     });
   }
 

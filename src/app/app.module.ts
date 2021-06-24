@@ -13,10 +13,15 @@ import { RegisterModule } from './components/register/register.module'
 
 //COMPONENTES
 import { AppComponent } from './app.component';
+import { UpdateNotasComponent } from './components/update-notas/update-notas.component';
+import { InicioNotasComponent } from './components/inicio-notas/inicio-notas.component';
+import { LoginUsersComponent } from './components/login-users/login-users.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    UpdateNotasComponent,
+    LoginUsersComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +34,8 @@ import { AppComponent } from './app.component';
     RegisterModule
 
   ],
-  providers: [],
+  providers: [InicioNotasComponent
+               ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
