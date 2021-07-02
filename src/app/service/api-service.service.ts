@@ -7,6 +7,8 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { Notas } from '../models/notas';
+
 
 
 const { endpoint } = environment;
@@ -19,61 +21,50 @@ export class ApiServiceService {
   constructor(private http: HttpClient) {
   }
 
-  public makeRequest(method: string, path: string, notas: any): Observable<any> {
-    // const { params, data } = payload;
-    // let httpHeaders = new HttpHeaders()
-    //   .set('Accept', 'application/json')
-    // let options = { headers: httpHeaders };
+  public makeRequest(method: string, path: string, notas: Notas, token?: string, refreshToken?: string): Observable<any> {
+    let httpHeaders = new HttpHeaders()
+    .set('Content-Type', 'application/json')
+    let options = { headers: httpHeaders };
 
     if (method == "GET") {
       let resp = this.http
-        .get(`${endpoint}/${path}`)
+        .get(`${endpoint}/${path}`, options)
         .pipe(catchError(this.handleError));
       return resp;
+
     } else if (method == "POST") {
-      console.log(notas);
-      let resp = this.http.post(`${endpoint}/${path}`, notas)
+      let resp = this.http.post(`${endpoint}/${path}`, notas, options)
       .pipe(catchError(this.handleError));
       return resp;
+
     } else if (method == "PUT") {
       let resp = this.http
         .put(`${endpoint}/${path}`, notas)
         .pipe(catchError(this.handleError));
       return resp;
     }
-    let resp = console.log("Error, no se encontro el metodo");
 
+    let resp = console.log("Error, no se encontro el metodo");
     return throwError(resp);
   }
 
   public get(path: string, params?: any): Observable<any> {
-    console.log('GET request initiated');
-    console.log(`Path: ${path}`);
-    console.log('Params:', params);
+    console.log('METHOD: GET - ' + `RUTA: ${path}`);
     return this.makeRequest('GET', path, params);
   }
 
-  public post(path: string, notas: any): Observable<any> {
-    console.log('POST');
-    console.log(`RUTA: ${path}`);
-    console.log('DATA:', notas);
-
-    return this.makeRequest('POST', path, { notas });
+  public post(path: string, notas: Notas): Observable<any> {
+    console.log('METHOD: POST - ' + `RUTA: ${path} - ` + 'DATA: ', notas);
+    return this.makeRequest('POST', path, notas);
   }
 
   public put(path: string, notas: any): Observable<any> {
-    console.log('PUT request initiated');
-    console.log(`Path: ${path}`);
-    console.log('Payload:', notas);
-
-    return this.makeRequest('PUT', path, { notas });
+    console.log('METHOD: PUT - ' + `RUTA: ${path}` + 'DATA: ', notas);
+    return this.makeRequest('PUT', path, notas );
   }
 
   public delete(path: string, params: any): Observable<any> {
-    console.log('DELETE request initiated');
-    console.log(`Path: ${path}`);
-    console.log('Payload:', params);
-
+    console.log('METHOD: DELETE - ' + `RUTA: ${path}`);
     return this.makeRequest('DELETE', path, params);
   }
 

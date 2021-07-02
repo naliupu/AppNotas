@@ -24,8 +24,6 @@ export class InicioNotasComponent implements OnInit {
   listNotas: Notas[] = []; //Guarda un listado de notas 
   listNotasFecha: Notas[] = []; //Guarda un listado de notas que se buscan por fecha
   idNota = null;
-
-
   notas: Notas;
   nota: any;
   listNotass: Notas[] = [];
@@ -45,11 +43,11 @@ export class InicioNotasComponent implements OnInit {
   ngOnInit(): void {
     this.GetNote();
   }
-
+  
   refresh(): void {
     window.location.reload();
   }
-
+  
   saveNota(nota) {
     this.getDate.nota = nota;
     console.log(this.getDate);

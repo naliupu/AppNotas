@@ -8,5 +8,6 @@ export class GetDateService {
 
   constructor() { }
 
+//Obtener la nota de inicioComponent y llamarla en update para listarla
 public nota: Notas;
 }
