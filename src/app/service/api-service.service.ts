@@ -9,8 +9,6 @@ import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Notas } from '../models/notas';
 
-
-
 const { endpoint } = environment;
 
 @Injectable({

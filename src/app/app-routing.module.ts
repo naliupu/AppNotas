@@ -4,13 +4,14 @@ import { InicioNotasComponent } from './components/inicio-notas/inicio-notas.com
 import { RegisterComponent } from './components/register/register.component';
 import { UpdateNotasComponent } from './components/update-notas/update-notas.component';
 import { LoginUsersComponent } from './components/login-users/login-users.component';
+import { AuthGuard } from './helpers/auth.guard';
 
 const routes: Routes = [
 
   { path: '', redirectTo: '/inicio', pathMatch: 'full' },
-  { path: 'inicio', component: InicioNotasComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'update', component: UpdateNotasComponent },
+  { path: 'inicio', component: InicioNotasComponent, canActivate:[AuthGuard] },
+  { path: 'register', component: RegisterComponent, canActivate:[AuthGuard] },
+  { path: 'update', component: UpdateNotasComponent, canActivate:[AuthGuard] },
   { path: 'login-users', component: LoginUsersComponent },
   { path: '**', redirectTo: '/inicio', pathMatch: 'full' }
 ];

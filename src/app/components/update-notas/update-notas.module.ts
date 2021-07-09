@@ -7,14 +7,13 @@ import { UpdateNotasRoutingModule } from './update-notas-routing.module';
 import { SharedModule} from '../../shared/shared.module'
 
 //COMPONENTES
-import { UpdateNotasComponent } from './update-notas.component';
-import { InicioNotasComponent } from '../inicio-notas/inicio-notas.component';
+// import { UpdateNotasComponent } from './update-notas.component';
+
 
 
 @NgModule({
   declarations: [
-    UpdateNotasComponent,
-    // InicioNotasComponent
+    // UpdateNotasComponent,
   ],
   imports: [
     CommonModule,

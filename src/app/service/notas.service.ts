@@ -3,14 +3,18 @@ import { Notas } from '../models/notas';
 import { Observable } from 'rxjs';
 import { ApiServiceService} from '../service/api-service.service'
 import config from './config';
- 
+
 const poolData = config.poolData;
 @Injectable({
   providedIn: 'root'
 })
 export class NotasService {
 
-  constructor(private api: ApiServiceService) { 
+  constructor(private api: ApiServiceService) {
+  }
+
+  Authorization(notas: Notas): Observable<any>{
+    return this.api.post(poolData.urlToken + "Authentication", notas)
   }
 
   SaveNote(notas: Notas): Observable<any>{

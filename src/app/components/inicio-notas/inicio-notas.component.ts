@@ -6,6 +6,7 @@ import { Notas } from 'src/app/models/notas';
 import { NotasService } from 'src/app/service/notas.service';
 import { GetDateService } from 'src/app/service/get-date.service';
 import { Router } from '@angular/router';
+import { JwtService } from 'src/app/service/jwt.service';
 
 // import { UpdateNotasComponent} from '../update-notas/update-notas.component';
 
@@ -21,7 +22,7 @@ export class InicioNotasComponent implements OnInit {
   updateDate: Notas;
   SearchDate: FormGroup; //formGroup de formulario para ingresar fecha
   dataNull = 0;
-  listNotas: Notas[] = []; //Guarda un listado de notas 
+  listNotas: Notas[] = []; //Guarda un listado de notas
   listNotasFecha: Notas[] = []; //Guarda un listado de notas que se buscan por fecha
   idNota = null;
   notas: Notas;
@@ -30,10 +31,12 @@ export class InicioNotasComponent implements OnInit {
 
   constructor(
     private notasService: NotasService,
+    private tokenDecode: JwtService,
     private getDate: GetDateService,
     private toastr: ToastrService,
     private fb: FormBuilder,
     private router: Router
+
   ) {
     this.SearchDate = this.fb.group({
       updateDate: ['', Validators.required],
@@ -43,14 +46,19 @@ export class InicioNotasComponent implements OnInit {
   ngOnInit(): void {
     this.GetNote();
   }
-  
+
   refresh(): void {
     window.location.reload();
   }
-  
+
+  clearLocalStorage(): void {
+    localStorage.removeItem('token');
+    this.toastr.warning('Cerro sesion con exito', 'Sesion cerrada');
+    this.router.navigate(['/login-users']);
+  }
+
   saveNota(nota) {
     this.getDate.nota = nota;
-    console.log(this.getDate);
     this.router.navigate(['/update']);
   }
 
@@ -58,7 +66,6 @@ export class InicioNotasComponent implements OnInit {
     this.loading = true;
     this.notasService.GetNotes().subscribe(data => {
       this.listNotas = data.notas;
-      console.log(this.listNotas);
       this.loading = false;
       this.toastr.info('Notas listadas con exito', 'Notas');
     }, error => {
@@ -76,7 +83,6 @@ export class InicioNotasComponent implements OnInit {
     this.notasService.SearchByDateNote(notas).subscribe(data => {
       this.listNotasFecha = data.notas;
       if (this.listNotasFecha.length > 0) {
-        console.log(this.listNotasFecha);
         this.listNotasFecha = data.notas;
         this.toastr.info('Notas filtradas con exito', 'Notas');
       }
@@ -89,7 +95,6 @@ export class InicioNotasComponent implements OnInit {
       }
       this.loading = false;
     }, error => {
-      console.log(this.listNotasFecha);
       console.log(error);
       this.loading = false;
       this.toastr.error('Ocurrio un error', 'Error');

@@ -6,10 +6,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-import { HttpClientModule } from '@angular/common/http';
-import { SharedModule} from '../app/shared/shared.module'
-import { InicioNotasModule } from './components/inicio-notas/inicio-notas.module'
-import { RegisterModule } from './components/register/register.module'
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { SharedModule} from '../app/shared/shared.module';
+import { InicioNotasModule } from './components/inicio-notas/inicio-notas.module';
+import { RegisterModule } from './components/register/register.module';
+
+//INTERCEPTORS
+import { TokenInterceptor} from '../app/helpers/token.interceptor';
 
 //COMPONENTES
 import { AppComponent } from './app.component';
@@ -34,7 +37,7 @@ import { LoginUsersComponent } from './components/login-users/login-users.compon
     RegisterModule
 
   ],
-  providers: [InicioNotasComponent
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
                ],
   bootstrap: [AppComponent]
 })
